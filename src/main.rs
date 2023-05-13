@@ -28,9 +28,15 @@ enum Command {
     /// Kill existing session
     Kill { session: Option<String> },
     /// Create new session
-    N,
+    N {
+        #[arg(short, long)]
+        attach: bool,
+    },
     /// Create new session
-    New,
+    New {
+        #[arg(short, long)]
+        attach: bool,
+    },
     /// List existing sessions
     Ls,
     /// List existing sessions
@@ -117,7 +123,7 @@ fn main() -> std::io::Result<()> {
                 }
             }
         }
-        Some(Command::N) | Some(Command::New) => {
+        Some(Command::N { attach }) | Some(Command::New { attach }) => {
             let input = dialoguer::Input::<String>::new()
                 .with_prompt("Session name")
                 .interact_text()?;
@@ -126,6 +132,12 @@ fn main() -> std::io::Result<()> {
                 .session_name(&input)
                 .output()
                 .unwrap();
+            if *attach {
+                AttachSession::new()
+                    .target_session(&input)
+                    .output()
+                    .unwrap();
+            }
         }
         Some(Command::Ls) | Some(Command::List) => {
             let sessions = Sessions::get(SESSION_ALL).unwrap();
