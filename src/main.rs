@@ -59,6 +59,12 @@ fn main() -> std::io::Result<()> {
                         None => (),
                     }
                 }
+
+                if session_names.is_empty() {
+                    println!("No sessions found");
+                    return Ok(());
+                }
+
                 let selection = FuzzySelect::with_theme(&ColorfulTheme::default())
                     .with_prompt("Select a session")
                     .default(0)
@@ -88,6 +94,12 @@ fn main() -> std::io::Result<()> {
                         None => (),
                     }
                 }
+
+                if session_names.is_empty() {
+                    println!("No sessions found");
+                    return Ok(());
+                }
+
                 let selection = FuzzySelect::with_theme(&ColorfulTheme::default())
                     .with_prompt("Select a session")
                     .default(0)
